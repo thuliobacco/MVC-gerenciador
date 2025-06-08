@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema de Tarefas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Dashboard Header -->
+        <div class="mb-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+                    <p class="text-gray-600 mt-1">Visão geral do seu sistema de tarefas</p>
+                </div>
+                <div class="flex space-x-3">
+                    <button onclick="createTask()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Nova Tarefa
+                    </button>
+                    <button onclick="createUser()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-user-plus mr-2"></i>Novo Usuário
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Total Tasks -->
+            <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-indigo-500">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-tasks text-indigo-500 text-2xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Total de Tarefas</p>
+                        <p id="total-tasks" class="text-2xl font-bold text-gray-900">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Users -->
+            <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-users text-green-500 text-2xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Total de Usuários</p>
+                        <p id="total-users" class="text-2xl font-bold text-gray-900">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Categories -->
+            <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-yellow-500">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-tags text-yellow-500 text-2xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Total de Categorias</p>
+                        <p id="total-categories" class="text-2xl font-bold text-gray-900">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Tasks -->
+            <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-red-500">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-clock text-red-500 text-2xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Tarefas Ativas</p>
+                        <p id="active-tasks" class="text-2xl font-bold text-gray-900">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Recent Tasks -->
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-gray-900">
+                            <i class="fas fa-list mr-2 text-indigo-500"></i>
+                            Tarefas Recentes
+                        </h2>
+                        <button onclick="viewAllTasks()" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                            Ver todas <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div id="recent-tasks" class="space-y-4">
+                        <!-- Loading state -->
+                        <div class="text-center py-8">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+                            <p class="text-gray-500">Carregando tarefas...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Users -->
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-gray-900">
+                            <i class="fas fa-users mr-2 text-green-500"></i>
+                            Usuários Recentes
+                        </h2>
+                        <button onclick="viewAllUsers()" class="text-green-600 hover:text-green-800 text-sm font-medium">
+                            Ver todos <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div id="recent-users" class="space-y-4">
+                        <!-- Loading state -->
+                        <div class="text-center py-8">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
+                            <p class="text-gray-500">Carregando usuários...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Section -->
+        <div class="mt-8">
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-gray-900">
+                            <i class="fas fa-tags mr-2 text-yellow-500"></i>
+                            Categorias
+                        </h2>
+                        <button onclick="manageCategories()" class="text-yellow-600 hover:text-yellow-800 text-sm font-medium">
+                            Gerenciar <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div id="categories-list" class="flex flex-wrap gap-2">
+                        <!-- Loading state -->
+                        <div class="text-center py-8 w-full">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-600 mx-auto mb-4"></div>
+                            <p class="text-gray-500">Carregando categorias...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="mt-8 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg shadow-md text-white">
+            <div class="p-8">
+                <h2 class="text-2xl font-bold mb-4">
+                    <i class="fas fa-rocket mr-2"></i>
+                    Ações Rápidas
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button onclick="createTask()" class="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-4 text-center transition-all transform hover:scale-105">
+                        <i class="fas fa-plus text-2xl mb-2"></i>
+                        <p class="font-semibold">Criar Tarefa</p>
+                    </button>
+                    <button onclick="createUser()" class="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-4 text-center transition-all transform hover:scale-105">
+                        <i class="fas fa-user-plus text-2xl mb-2"></i>
+                        <p class="font-semibold">Adicionar Usuário</p>
+                    </button>
+                    <button onclick="createCategory()" class="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-4 text-center transition-all transform hover:scale-105">
+                        <i class="fas fa-tag text-2xl mb-2"></i>
+                        <p class="font-semibold">Nova Categoria</p>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flash Messages Container -->
+        <div id="flash-messages" class="fixed top-4 right-4 z-50"></div>
+    </div>
+
+    <script>
+        // Mock data for demonstration
+        let mockTasks = [
+            { id: 1, title: "Implementar autenticação", status: "Em andamento", priority: "Alta", category: "Desenvolvimento", created_at: "2025-06-05" },
+            { id: 2, title: "Corrigir bug na API", status: "Concluída", priority: "Crítica", category: "Bug Fix", created_at: "2025-06-04" },
+            { id: 3, title: "Atualizar documentação", status: "Pendente", priority: "Média", category: "Documentação", created_at: "2025-06-03" },
+            { id: 4, title: "Otimizar consultas do banco", status: "Em andamento", priority: "Alta", category: "Performance", created_at: "2025-06-02" },
+            { id: 5, title: "Implementar testes unitários", status: "Pendente", priority: "Média", category: "Testes", created_at: "2025-06-01" }
+        ];
+
+        let mockUsers = [
+            { id: 1, name: "João Silva", email: "joao@email.com", role: "Desenvolvedor", created_at: "2025-06-05" },
+            { id: 2, name: "Maria Santos", email: "maria@email.com", role: "Designer", created_at: "2025-06-04" },
+            { id: 3, name: "Pedro Costa", email: "pedro@email.com", role: "Gerente", created_at: "2025-06-03" },
+            { id: 4, name: "Ana Lima", email: "ana@email.com", role: "Tester", created_at: "2025-06-02" }
+        ];
+
+        let mockCategories = [
+            { id: 1, name: "Desenvolvimento", color: "#3B82F6" },
+            { id: 2, name: "Bug Fix", color: "#EF4444" },
+            { id: 3, name: "Documentação", color: "#10B981" },
+            { id: 4, name: "Performance", color: "#F59E0B" },
+            { id: 5, name: "Testes", color: "#8B5CF6" }
+        ];
+
+        // Dashboard JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+        });
+
+        async function loadDashboardData() {
+            try {
+                // Load statistics
+                await Promise.all([
+                    loadStatistics(),
+                    loadRecentTasks(),
+                    loadRecentUsers(),
+                    loadCategories()
+                ]);
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showFlashMessage('Erro ao carregar dados do dashboard', 'error');
+            }
+        }
+
+        async function loadStatistics() {
+            try {
+                // Simulate API calls with mock data
+                const tasks = mockTasks;
+                const users = mockUsers;
+                const categories = mockCategories;
+                const activeTasks = tasks.filter(task => task.status !== 'Concluída');
+
+                document.getElementById('total-tasks').textContent = tasks.length;
+                document.getElementById('total-users').textContent = users.length;
+                document.getElementById('total-categories').textContent = categories.length;
+                document.getElementById('active-tasks').textContent = activeTasks.length;
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        async function loadRecentTasks() {
+            try {
+                const tasks = mockTasks;
+                const recentTasks = tasks.slice(0, 5); // Get last 5 tasks
+                
+                const container = document.getElementById('recent-tasks');
+                
+                if (recentTasks.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-8">
+                            <i class="fas fa-inbox text-gray-300 text-4xl mb-4"></i>
+                            <p class="text-gray-500">Nenhuma tarefa encontrada</p>
+                            <button onclick="createTask()" class="text-indigo-600 hover:text-indigo-800 mt-2">
+                                Criar primeira tarefa
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = recentTasks.map(task => `
+                    <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="flex-1">
+                            <h3 class="font-medium text-gray-900">${task.title}</h3>
+                            <div class="flex items-center mt-1 space-x-4">
+                                <span class="text-sm text-gray-500">
+                                    <i class="fas fa-tag mr-1"></i>${task.category}
+                                </span>
+                                <span class="text-sm ${getPriorityColor(task.priority)}">
+                                    <i class="fas fa-circle mr-1 text-xs"></i>${task.priority}
+                                </span>
+                                <span class="text-sm text-gray-500">
+                                    <i class="fas fa-calendar mr-1"></i>${formatDate(task.created_at)}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(task.status)}">
+                                ${task.status}
+                            </span>
+                            <button onclick="editTask(${task.id})" class="text-gray-400 hover:text-indigo-600">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading recent tasks:', error);
+                document.getElementById('recent-tasks').innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-exclamation-triangle text-red-300 text-4xl mb-4"></i>
+                        <p class="text-red-500">Erro ao carregar tarefas</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function loadRecentUsers() {
+            try {
+                const users = mockUsers;
+                const recentUsers = users.slice(0, 5); // Get last 5 users
+                
+                const container = document.getElementById('recent-users');
+                
+                if (recentUsers.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-8">
+                            <i class="fas fa-user-friends text-gray-300 text-4xl mb-4"></i>
+                            <p class="text-gray-500">Nenhum usuário encontrado</p>
+                            <button onclick="createUser()" class="text-green-600 hover:text-green-800 mt-2">
+                                Adicionar primeiro usuário
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = recentUsers.map(user => `
+                    <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center space-x-3">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                    ${user.name.charAt(0).toUpperCase()}
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-gray-900">${user.name}</h3>
+                                <div class="flex items-center mt-1 space-x-3">
+                                    <span class="text-sm text-gray-500">
+                                        <i class="fas fa-envelope mr-1"></i>${user.email}
+                                    </span>
+                                    <span class="text-sm text-gray-500">
+                                        <i class="fas fa-user-tag mr-1"></i>${user.role}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs text-gray-500">${formatDate(user.created_at)}</span>
+                            <button onclick="editUser(${user.id})" class="text-gray-400 hover:text-green-600">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading recent users:', error);
+                document.getElementById('recent-users').innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-exclamation-triangle text-red-300 text-4xl mb-4"></i>
+                        <p class="text-red-500">Erro ao carregar usuários</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function loadCategories() {
+            try {
+                const categories = mockCategories;
+                const container = document.getElementById('categories-list');
+                
+                if (categories.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-8 w-full">
+                            <i class="fas fa-tags text-gray-300 text-4xl mb-4"></i>
+                            <p class="text-gray-500">Nenhuma categoria encontrada</p>
+                            <button onclick="createCategory()" class="text-yellow-600 hover:text-yellow-800 mt-2">
+                                Criar primeira categoria
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = categories.map(category => `
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white hover:opacity-80 cursor-pointer transition-opacity"
+                          style="background-color: ${category.color}"
+                          onclick="filterByCategory('${category.name}')">
+                        <i class="fas fa-tag mr-1 text-xs"></i>
+                        ${category.name}
+                    </span>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading categories:', error);
+                document.getElementById('categories-list').innerHTML = `
+                    <div class="text-center py-8 w-full">
+                        <i class="fas fa-exclamation-triangle text-red-300 text-4xl mb-4"></i>
+                        <p class="text-red-500">Erro ao carregar categorias</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Utility functions
+        function getPriorityColor(priority) {
+            const colors = {
+                'Baixa': 'text-green-600',
+                'Média': 'text-yellow-600',
+                'Alta': 'text-orange-600',
+                'Crítica': 'text-red-600'
+            };
+            return colors[priority] || 'text-gray-600';
+        }
+
+        function getStatusColor(status) {
+            const colors = {
+                'Pendente': 'bg-yellow-100 text-yellow-800',
+                'Em andamento': 'bg-blue-100 text-blue-800',
+                'Concluída': 'bg-green-100 text-green-800',
+                'Cancelada': 'bg-red-100 text-red-800'
+            };
+            return colors[status] || 'bg-gray-100 text-gray-800';
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR');
+        }
+
+        // Action functions
+        function createTask() {
+            showFlashMessage('Redirecionando para criação de tarefa...', 'info');
+            // In a real app, this would redirect to /tasks/create
+        }
+
+        function createUser() {
+            showFlashMessage('Redirecionando para criação de usuário...', 'info');
+            // In a real app, this would redirect to /users/create
+        }
+
+        function createCategory() {
+            showFlashMessage('Redirecionando para criação de categoria...', 'info');
+            // In a real app, this would redirect to /categories/create
+        }
+
+        function viewAllTasks() {
+            showFlashMessage('Redirecionando para lista de tarefas...', 'info');
+            // In a real app, this would redirect to /tasks
+        }
+
+        function viewAllUsers() {
+            showFlashMessage('Redirecionando para lista de usuários...', 'info');
+            // In a real app, this would redirect to /users
+        }
+
+        function manageCategories() {
+            showFlashMessage('Redirecionando para gerenciamento de categorias...', 'info');
+            // In a real app, this would redirect to /categories
+        }
+
+        function editTask(taskId) {
+            showFlashMessage(`Editando tarefa ${taskId}...`, 'info');
+            // In a real app, this would redirect to /tasks/edit/{taskId}
+        }
+
+        function editUser(userId) {
+            showFlashMessage(`Editando usuário ${userId}...`, 'info');
+            // In a real app, this would redirect to /users/edit/{userId}
+        }
+
+        function filterByCategory(categoryName) {
+            showFlashMessage(`Filtrando por categoria: ${categoryName}`, 'info');
+            // In a real app, this would filter tasks by category
+        }
+
+        // Flash message system
+        function showFlashMessage(message, type = 'info') {
+            const colors = {
+                'success': 'bg-green-500',
+                'error': 'bg-red-500',
+                'warning': 'bg-yellow-500',
+                'info': 'bg-blue-500'
+            };
+
+            const icons = {
+                'success': 'fas fa-check-circle',
+                'error': 'fas fa-exclamation-circle',
+                'warning': 'fas fa-exclamation-triangle',
+                'info': 'fas fa-info-circle'
+            };
+
+            const flashContainer = document.getElementById('flash-messages');
+            const flashElement = document.createElement('div');
+            
+            flashElement.className = `${colors[type]} text-white px-6 py-4 rounded-lg shadow-lg mb-4 transform translate-x-full transition-transform duration-300 flex items-center space-x-2`;
+            flashElement.innerHTML = `
+                <i class="${icons[type]}"></i>
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+
+            flashContainer.appendChild(flashElement);
+
+            // Animate in
+            setTimeout(() => {
+                flashElement.classList.remove('translate-x-full');
+            }, 100);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (flashElement.parentElement) {
+                    flashElement.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        if (flashElement.parentElement) {
+                            flashElement.remove();
+                        }
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        // Auto-refresh dashboard data every 5 minutes
+        setInterval(loadDashboardData, 300000);
+    </script>
+</body>
+</html>

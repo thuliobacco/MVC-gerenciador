@@ -1,0 +1,36 @@
+CREATE TABLE IF NOT EXISTS Users (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS Tasks (
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    descricao TEXT,
+    duracao INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS Categories (
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS user_task (
+    id SERIAL PRIMARY KEY,
+    id_user INT NOT NULL,
+    id_task INT NOT NULL,
+    FOREIGN KEY (id_user) REFERENCES Users(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_task) REFERENCES Tasks(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS task_category (
+    id_task INT NOT NULL,
+    id_category INT NOT NULL,
+    PRIMARY KEY (id_task, id_category),
+    FOREIGN KEY (id_task) REFERENCES Tasks(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_category) REFERENCES Categories(id) ON DELETE CASCADE
+);
