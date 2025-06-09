@@ -1,3 +1,95 @@
+# Dependências do Node.js
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Variáveis de ambiente
 .env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Arquivos de runtime
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Diretório de coverage de testes
 coverage/
+.nyc_output/
+
+# Arquivos de configuração do ESLint
+.eslintcache
+
+# Arquivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Arquivos do macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Arquivos do Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Arquivos temporários
+tmp/
+temp/
+*.tmp
+
+# Uploads (para futuras implementações)
+uploads/
+public/uploads/
+
+# Backup de banco de dados
+*.sql
+*.dump
+backups/
+
+# Arquivos compilados
+dist/
+build/
+
+# Cache
+.cache/
+*.tgz
+
+# Arquivos de configuração específicos
+.env.example.bak
+config/database.js.bak
+
+# Documentação gerada
+docs/generated/
+
+# Arquivos de profiling
+isolate-*-v8.log
+
+# Diretórios opcionais npm
+.npm
+.cache
+
+# Arquivos de lock (manter apenas um tipo)
+# Descomente a linha apropriada baseada no seu gerenciador de pacotes
+# package-lock.json  # Se usar yarn
+# yarn.lock          # Se usar npm

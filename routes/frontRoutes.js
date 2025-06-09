@@ -1,30 +1,47 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const path = require("path");
-const userService = require("../services/userService");
-const taskService = require("../services/taskService");
 
-router.get("/", async (req, res) => {
-  try {
-    const users = await userService.getAllUsers();
-    const tasks = await taskService.getAllTasks();
-    res.render(path.join(__dirname, "../views/layout/main"), {
-      pageTitle: "Gerenciador de Tarefas",
-      content: path.join(__dirname, "../views/pages/page1"),
-      users,
-      tasks,
+// Página de teste
+router.get('/teste', (req, res) => {
+    res.render('pages/test');
+});
+
+// Página principal - Dashboard
+router.get('/', (req, res) => {
+    res.render('layout/main', {
+        title: 'Dashboard - TaskFlow',
+        page: 'dashboard'
     });
-  } catch (error) {
-    console.error("Erro ao carregar a página inicial:", error);
-    res.status(500).send("Erro ao carregar a página inicial");
-  }
 });
 
-router.get("/about", (req, res) => {
-  res.render(path.join(__dirname, "../views/layout/main"), {
-    pageTitle: "Sobre o Gerenciador de Tarefas",
-    content: path.join(__dirname, "../views/pages/page2"),
-  });
+// Página de tarefas
+router.get('/tarefas', (req, res) => {
+    res.render('layout/main', {
+        title: 'Tarefas - TaskFlow',
+        page: 'tasks'
+    });
 });
+
+// Página de usuários
+router.get('/usuarios', (req, res) => {
+    res.render('layout/main', {
+        title: 'Usuários - TaskFlow',
+        page: 'users'
+    });
+});
+
+// Página de categorias
+router.get('/categorias', (req, res) => {
+    res.render('layout/main', {
+        title: 'Categorias - TaskFlow',
+        page: 'categories'
+    });
+});
+
+// Rotas alternativas em inglês (para compatibilidade)
+router.get('/tasks', (req, res) => res.redirect('/tarefas'));
+router.get('/users', (req, res) => res.redirect('/usuarios'));
+router.get('/categories', (req, res) => res.redirect('/categorias'));
+router.get('/dashboard', (req, res) => res.redirect('/'));
 
 module.exports = router;
